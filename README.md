@@ -45,14 +45,15 @@
 - VMess/VLESS也可开启Mux，效果需要自己尝试，XTLS不支持Mux。仅需客户端开启，服务端自适应。
 
 ## 特性
-- VLESS/VMess/Trojan-Go三种工具合并为一个脚本，可以体验不同的工具之间的不同特性、兼容更多的设备。
-- 支持Debian、Ubuntu、Centos
-- 支持个性化安装，VLESS+TCP为必选，其余为可选项。
-- 脚本自动检查升级
-- 自动更新TLS证书
+- 支持[Xray-core[XTLS]](https://github.com/XTLS/Xray-core)、v2ray-core [XTLS]、v2ray-core
+- 支持不同核心之间的配置文件互相读取。
+- 支持 VLESS/VMess/trojan/trojan-go-->ws的协议
+- 支持Debian、Ubuntu、Centos，支持主流的cpu架构。
+- 支持个性化安装。
+- 不需要卸载就可以重装任何组合。卸载脚本时，是完全卸载无残留。
 - 支持快捷方式启动，安装完毕后，shell输入[vasma]即可打开脚本，脚本执行路径[/etc/v2ray-agent/install.sh]
-- 未来会支持Xray-core
-- 未来会支持ipv6【手头暂时没有ipv6的机器，如有闲置的ipv6机器可以赞助给我】
+- [ ] 未来会支持ipv6
+
 
 ## 注意事项
 - 修改Cloudflare->SSL/TLS->Overview->Full
@@ -74,7 +75,7 @@ wget -P /root -N --no-check-certificate "https://raw.githubusercontent.com/mack-
 <img src="https://raw.githubusercontent.com/mack-a/v2ray-agent/master/fodder/install/install.jpg" width=700>
 
 # 许可证
-[MIT](https://github.com/mack-a/v2ray-agent/blob/master/LICENSE)
+[GPL-3.0](https://github.com/mack-a/v2ray-agent/blob/master/LICENSE)
 
 ## Stargazers over time
 
