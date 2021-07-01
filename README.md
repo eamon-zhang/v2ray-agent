@@ -35,15 +35,15 @@
 
 - 支持[Xray-core[XTLS]](https://github.com/XTLS/Xray-core)、v2ray-core [XTLS]、v2ray-core
 - 支持不同核心之间的配置文件互相读取
-- 支持 VLESS/VMess/trojan/trojan-go[ws]
+- 支持 VLESS/VMess/trojan 协议
 - 支持Debian、Ubuntu、Centos，支持主流的cpu架构。**不建议使用Centos以及低版本的系统，2.3.x后不再支持Centos6**
 - 支持个性化安装
 - 支持多用户管理
 - 支持Netflix检测、支持DNS流媒体解锁、支持任意门解锁Netflix
 - 无需卸载即可安装、重装任意组合
-- 支持卸载时保留Nginx、tls证书。如果acme.sh申请的证书有效的情况下，不会重新签发。
+- 支持卸载时保留Nginx、tls证书。如果acme.sh申请的证书在有效的情况下，不会重新签发
 - 支持纯IPv6，[IPv6注意事项](https://github.com/mack-a/v2ray-agent/blob/master/documents/ipv6_help.md)
-- 支持IPv6分流
+- 支持IPv4[入]->IPv6分流[出]
 - 支持日志管理
 - 支持多端口配置
 - [支持自定义证书安装](https://github.com/mack-a/v2ray-agent/blob/master/documents/install_tls.md)
@@ -80,13 +80,14 @@
 
 - 中转/gia ---> VLESS+TCP+TLS/XTLS、Trojan【推荐使用XTLS的xtls-rprx-direct】
 - 移动宽带 ---> VMESS+WS+TLS/Trojan-Go+WS + Cloudflare
+- cloudflare-> VLESS+gRPC+tls[多路复用]
 - Trojan建议开启Mux【**多路复用**】，仅需客户端开启，服务端自适应。
 - VMess/VLESS也可开启Mux，效果需要自己尝试，XTLS不支持Mux。仅需客户端开启，服务端自适应。
 
 ## 注意事项
 
 - **修改Cloudflare->SSL/TLS->Overview->Full**
-- **Cloudflare ---> A记录解析的云朵必须为灰色**
+- **Cloudflare ---> A记录解析的云朵必须为灰色【如非灰色，会影响到定时任务自动续签证书】**
 - **使用纯净系统安装，如使用其他脚本安装过，请重新build系统再安装**
 - wget: command not found [**这里需要自己手动安装下wget**]
   ，如未使用过Linux，[点击查看](https://github.com/mack-a/v2ray-agent/tree/master/documents/install_tools.md)安装教程
@@ -95,73 +96,27 @@
 - **如发现Nginx相关问题，请卸载掉自编译的nginx或者重新build系统**
 - **为了节约时间，反馈请带上详细截图或者按照模版规范，无截图或者不按照规范的issue会被直接关闭**
 - **不建议GCP用户使用**
-- **不建议使用Centos以及低版本的系统，2.3.x后不再支持Centos6**
+- **不建议使用Centos以及低版本的系统，如果Centos安装失败，请切换至Debian10重新尝试，脚本不再支持Centos6、Ubuntu 16.x**
 - **[如有使用不明白的地方请先查看脚本使用指南](https://github.com/mack-a/v2ray-agent/blob/master/documents/how_to_use.md)**
 - **Oracle vps有一个额外的防火墙，需要手动设置**
 - **如果使用gRPC通过cloudflare转发,需要在cloudflare设置允许gRPC，cloudflare Network->gRPC**
 
-## 脚本目录
+## [脚本使用指南](https://github.com/mack-a/v2ray-agent/blob/master/documents/how_to_use.md)、[脚本目录](https://github.com/mack-a/v2ray-agent/blob/master/documents/how_to_use.md#5脚本目录)
 
-### Xray-core
+## 捐赠
 
-- 主目录
+[您可以使用我的AFF进行购买VPS捐赠](https://github.com/mack-a/v2ray-agent/blob/master/documents/donation_aff.md)
 
-```
-/etc/v2ray-agent/xray
-```
+[支持通过虚拟币向我捐赠](https://github.com/mack-a/v2ray-agent/blob/master/documents/donation.md)
 
-- 配置文件目录
-
-```
-/etc/v2ray-agent/xray/conf
-```
-
-### v2ray-core
-
-- 主目录
-
-```
-/etc/v2ray-agent/v2ray
-```
-
-- 配置文件目录
-
-```
-/etc/v2ray-agent/v2ray/conf
-```
-
-### Trojan
-
-- 目录
-
-```
-/etc/v2ray-agent/trojan
-```
-
-### TLS证书
-
-- 目录
-
-```
-/etc/v2ray-agent/tls
-```
-
-### Nginx
-
-- Nginx配置文件
-
-```
-/etc/nginx/conf.d/alone.conf
-```
-
-- Nginx伪装站点目录
-
-```
-/usr/share/nginx/html
-```
-
-## [脚本使用指南](https://github.com/mack-a/v2ray-agent/blob/master/documents/how_to_use.md)
-
+## 客户端推荐
+- Android
+  - [AnXray](https://github.com/XTLS/AnXray/releases)
+- iOS
+  - Shadowrocket
+- windows/Mac/Linux
+  - [Qv2ray](https://github.com/Qv2ray/Qv2ray/actions)[推荐action版本]
+  
 ## 安装脚本
 
 - 支持快捷方式启动，安装完毕后，shell输入【**vasma**】即可打开脚本，脚本执行路径[**/etc/v2ray-agent/install.sh**]
@@ -172,23 +127,15 @@
 wget -P /root -N --no-check-certificate "https://raw.githubusercontent.com/mack-a/v2ray-agent/master/install.sh" && chmod 700 /root/install.sh && /root/install.sh
 ```
 
-- Stable-v2.2.24
-
+- dev_trojan_gRPC【Beta】
 ```
-wget -P /root -N --no-check-certificate "https://raw.githubusercontent.com/mack-a/v2ray-agent/9ae23c13a56460d8c14f27c8eb65efc73b173f46/install.sh" && chmod 700 /root/install.sh && /root/install.sh
-```
-
-- Stable-v2.1.27
-
-```
-wget -P /root -N --no-check-certificate "https://raw.githubusercontent.com/mack-a/v2ray-agent/3f8ea0aa364ae2e1e407056074c11b448396261f/install.sh" && chmod 700 /root/install.sh && /root/install.sh
+wget -P /root -N --no-check-certificate "https://raw.githubusercontent.com/mack-a/v2ray-agent/dev_trojan/install.sh" && chmod 700 /root/install.sh && /root/install.sh
 ```
 
-## 捐赠
-
-[您可以使用我的AFF进行购买VPS捐赠](https://github.com/mack-a/v2ray-agent/blob/master/documents/donation_aff.md)
-
-[支持通过虚拟币向我捐赠](https://github.com/mack-a/v2ray-agent/blob/master/documents/donation.md)
+- Stable-v2.4.16【无gRPC】
+```
+wget -P /root -N --no-check-certificate "https://raw.githubusercontent.com/mack-a/v2ray-agent/stable_v2.4.16/install.sh" && chmod 700 /root/install.sh && /root/install.sh
+```
 
 # 示例图
 
